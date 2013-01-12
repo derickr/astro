@@ -51,7 +51,7 @@ void spherical_to_rectangular(double ra, double decl, double r, double *x, doubl
  */
 void rectangular_to_spherical(double x, double y, double z, double *ra, double *decl, double *r)
 {
-	*r - sqrt( x * x + y * y + z * z );
+	*r = sqrt( x * x + y * y + z * z );
 	*ra = atan2d( y, x );
 	*decl = atan2d( z, sqrt( x * x + y * y ) );
 }
