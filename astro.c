@@ -1,4 +1,5 @@
 #include <math.h>
+#include "astro.h"
 
 #define PI          3.14159265358979323846
 #define RADEG       (180.0/PI)
@@ -16,28 +17,6 @@ static double rev( double x )
 {
 	return  x - floor( x / 360.0 ) * 360.0;
 }
-
-#ifndef HAVE_CBRT
-/* Calculates the cubic root of "x"
- * in: x
- * return: cubic root of "x"
- */
-static double cbrt( double x )
-{
-	if ( x > 0.0 )
-	{
-		return exp( log(x) / 3.0 );
-	}
-	else if ( x < 0.0 )
-	{
-		return -cbrt(-x);
-	}
-	else /* x == 0.0 */
-	{
-		return 0.0;
-	}
-}
-#endif
 
 /* Converts spherical coordinates ra, decl and r to rectangular coordinates x,
  * y, and z
