@@ -1,8 +1,11 @@
+#include "astro.h"
+
 int main(void)
 {
 	double daynr;
-	double lat, lon, year, month, day, h, m;
-	double L, ra, decl, rad, SIDTIME, HA;
+	double lat, lon;
+	int    year, month, day, h, m;
+	double L, M, ra, decl, rad, SIDTIME, HA;
 	double azimuth, altitude;
 
 	year = 2013;
@@ -23,7 +26,7 @@ int main(void)
 
 	date_to_daynr(year, month, day, h, m, 0, &daynr);
 
-	sunpos(daynr, &L, &ra, &decl, &rad);
+	sunpos(daynr, &L, &M, &ra, &decl, &rad);
 	printf("%f, %f, %f, %f\n", L, ra, decl, rad);
 
 	sidtime_and_ha(L, h + (m/60), lon, ra, &SIDTIME, &HA);

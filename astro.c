@@ -109,22 +109,22 @@ void date_to_daynr(int y, int m, int d, int h, int i, int s, double *time)
  *
  * in: d (time)
  * out: L, RA, decl, rad */
-void sunpos(double d, double *L, double *ra, double *decl, double *rad)
+void sunpos(double d, double *L, double *M, double *ra, double *decl, double *rad)
 {
-	double w, a, e, M, oblecl, E, x, y, r, v, z, ex, ey, ez, i_lon;
+	double w, a, e, oblecl, E, x, y, r, v, z, ex, ey, ez, i_lon;
 
 	w = 282.9404 + 4.70935e-5 * d;
 	a = 1.000000;
 	e = 0.016709 - 1.151e-9 * d;
-	M = 356.0470 + 0.9856002585 * d;
-	M = rev(M);
+	*M = 356.0470 + 0.9856002585 * d;
+	*M = rev(*M);
 
 	oblecl = 23.4393 - 3.563e-7 * d;
 
-	*L = w + M;
+	*L = w + *M;
 	*L = rev(*L); /* Sun's mean logitude */
 
-	E = M + (180/PI) * e * sind(M) * (1 + e * cosd(M));
+	E = *M + (180/PI) * e * sind(*M) * (1 + e * cosd(*M));
 
 	x = cosd(E) - e;
 	y = sind(E) * sqrt(1 - e * e);
