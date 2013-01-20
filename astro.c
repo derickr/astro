@@ -143,6 +143,78 @@ void sunpos(double d, double *L, double *M, double *ra, double *decl, double *ra
 	rectangular_to_spherical(ex, ey, ez, ra, decl, rad);
 }
 
+void moonpos(double d, double Ls, double Ms, double *ra, double *decl, double *rad)
+{
+	double N, i, w, a, e, M;
+	double E, E0, E1;
+	double x, y, z, r, v, ex, ey, ez, lon, lat;
+	double Lm, Mm, D, F;
+
+	N = rev(125.1228 - 0.0529538083 * d);
+	i = rev(  5.1454);
+	w = rev(318.0634 + 0.1643573223 * d);
+	a = rev( 60.2666);
+	e = rev(  0.054900);
+	M = rev(115.3654 + 13.0649929509 * d);
+
+	E0 = M + (180/M_PI) * e * sind(M) * (1 + e * cosd(M));
+	do {
+		E1 = E0 - (E0 - (180/M_PI) * e * sind(E0) - M) / (1 - e * cosd(E0));
+		if (fabs(E1 - E0) < 0.0005) {
+			break;
+		}
+		E0 = E1;
+	} while (1);
+	E = E1;
+
+	x = a * (cosd(E) - e);
+	y = a * sqrt(1 - e*e) * sind(E);
+
+	r = sqrt(x*x + y*y);
+	v = rev(atan2d(y, x));
+
+	ex = r * (cosd(N) * cosd(v + w) - sind(N) * sind(v + w) * cosd(i));
+	ey = r * (sind(N) * cosd(v + w) + cosd(N) * sind(v + w) * cosd(i));
+	ez = r * sind(v + w) * sind(i);
+
+	rectangular_to_spherical(ex, ey, ez, &lon, &lat, rad);
+
+	Lm = rev(N + w + M);
+	Mm = M;
+	D = rev(Lm - Ls);
+	F = rev(Lm - N);
+
+	lon = lon
+		- 1.274 * sind(Mm - 2*D)
+		+ 0.658 * sind(2 * D)
+		- 0.186 * sind(Ms)
+		- 0.059 * sind(2*Mm - 2*D)
+		- 0.057 * sind(Mm - 2*D + Ms)
+		+ 0.053 * sind(Mm + 2*D)
+		+ 0.046 * sind(2*D - Ms)
+		+ 0.041 * sind(Mm - Ms)
+		- 0.035 * sind(D)
+		- 0.031 * sind(Mm + Ms)
+		- 0.015 * sind(2*F - 2*D)
+		+ 0.011 * sind(Mm - 4*D);
+
+	lat = lat
+		- 0.173 * sind(F - 2*D)
+		- 0.055 * sind(Mm - F - 2*D)
+		- 0.046 * sind(Mm + F - 2*D)
+		+ 0.033 * sind(F + 2*D)
+		+ 0.017 * sind(2*Mm + F);
+
+	*rad = *rad
+		- 0.58 * cosd(Mm - 2*D)
+		- 0.46 * cosd(2*D);
+	
+	spherical_to_rectangular(lon, lat, 1, &x, &y, &z);
+	ecliptic_to_equatorial(x, y, z, (23.4393 - 3.563e-7 * d), &ex, &ey, &ez);
+	rectangular_to_spherical(ex, ey, ez, ra, decl, rad);
+	*ra = rev(*ra);
+}
+
 /* Calculates the Siderial Time (sidtime) and Hour Angle (HA)
  * in: L, utoffset, lon, ra
  * out: sidtime, ha

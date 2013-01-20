@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #ifndef __ASTRO_H__
 #define __ASTRO_H__
 void date_to_daynr(int y, int m, int d, int h, int i, int s, double *time);

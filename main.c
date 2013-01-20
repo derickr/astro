@@ -29,6 +29,9 @@ int main(void)
 	sunpos(daynr, &L, &M, &ra, &decl, &rad);
 	printf("%f, %f, %f, %f\n", L, ra, decl, rad);
 
+	moonpos(daynr, L, M, &ra, &decl, &rad);
+	printf("MOON: %f, %f, %f\n", ra, decl, rad);
+
 	sidtime_and_ha(L, h + (m/60), lon, ra, &SIDTIME, &HA);
 
 	sunaltazimuth(L, lat, HA, decl, &azimuth, &altitude);
